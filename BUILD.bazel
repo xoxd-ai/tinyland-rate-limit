@@ -2,14 +2,16 @@
 BUILD.bazel for @tummycrypt/tinyland-rate-limit.
 
 Dual-mode build: works with both pnpm (standalone) and Bazel (CI/production).
-  Standalone: cd packages/tinyland-rate-limit && pnpm build
-  Monorepo:   bazel build //packages/tinyland-rate-limit/...
+  Standalone: pnpm test
+  Bazel:      bazel build //:pkg && bazel test //...
+  Consumers:  bazel_dep(name = "tummycrypt_tinyland_rate_limit", version = "1.0.0")
+              from xoxd-ai/bazel-registry; the package is not published to npm.
 """
 
 load("@aspect_rules_js//npm:defs.bzl", "npm_package")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
-load("@npm//:defs.bzl", "npm_link_all_packages")
-load("@npm//:vitest/package_json.bzl", vitest_bin = "bin")
+load("@tummycrypt_tinyland_rate_limit_npm//:defs.bzl", "npm_link_all_packages")
+load("@tummycrypt_tinyland_rate_limit_npm//:vitest/package_json.bzl", vitest_bin = "bin")
 
 npm_link_all_packages(name = "node_modules")
 
@@ -45,7 +47,7 @@ npm_package(
         ":tinyland_rate_limit",
     ],
     package = "@tummycrypt/tinyland-rate-limit",
-    version = "0.3.0",
+    version = "1.0.0",
     visibility = ["//visibility:public"],
 )
 
@@ -53,6 +55,7 @@ vitest_bin.vitest_test(
     name = "test",
     data = [
         ":node_modules",
+        "package.json",
         "tsconfig.json",
         ":node_modules/vitest",
         "vitest.config.ts",
@@ -64,6 +67,21 @@ vitest_bin.vitest_test(
         "$(rootpath vitest.config.ts)",
     ],
     log_level = "info",
+    visibility = ["//visibility:public"],
+)
+
+ts_project(
+    name = "typecheck",
+    srcs = glob(["src/**/*.ts"]) + ["package.json"],
+    declaration = False,
+    no_emit = True,
+    tsconfig = ":tsconfig.json",
+    transpiler = "tsc",
+    validate = False,
+    deps = [
+        ":node_modules",
+        ":node_modules/@types/node",
+    ],
     visibility = ["//visibility:public"],
 )
 

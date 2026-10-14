@@ -1,6 +1,7 @@
 {
   "name": "@tummycrypt/tinyland-rate-limit",
-  "version": "0.3.0",
+  "version": "1.0.0",
+  "private": true,
   "description": "Framework-agnostic rate limiting and CSRF protection middleware",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,44 +15,41 @@
   },
   "files": [
     "dist",
-    "LICENSE"
+    "!dist/**/*.test.*",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm build && pnpm check:package",
     "test": "vitest run",
     "test:coverage": "vitest --coverage",
     "typecheck": "tsc --noEmit",
     "check:package": "publint"
   },
   "author": "Tinyland.dev",
-  "license": "Zlib AND LicenseRef-Tinyland-Proprietary",
+  "license": "(Zlib AND LicenseRef-Tinyland-Proprietary)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tinyland-inc/tinyland-rate-limit.git"
+    "url": "git+https://github.com/xoxd-ai/tinyland-rate-limit.git"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^4.0.0",
-    "publint": "^0.3.18",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
     "pg": "^8.11.0",
-    "@types/pg": "^8.11.0"
+    "publint": "^0.3.25",
+    "typescript": "7.0.2",
+    "vite": "8.3.3",
+    "vitest": "5.0.3"
   },
   "engines": {
     "node": ">=22.0.0"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
   "packageManager": "pnpm@10.13.1",
-  "homepage": "https://github.com/tinyland-inc/tinyland-rate-limit",
+  "homepage": "https://github.com/xoxd-ai/tinyland-rate-limit",
   "bugs": {
-    "url": "https://github.com/tinyland-inc/tinyland-rate-limit/issues"
+    "url": "https://github.com/xoxd-ai/tinyland-rate-limit/issues"
   },
   "peerDependencies": {
     "pg": "^8.11.0"
